@@ -21,7 +21,7 @@ io.on("connection", (socket) => {
   });
   socket.on("newMessage", ({ newMessage, room }) => {
     console.log(newMessage, room);
-    io.in(room).emit("latestMessages", newMessage);
+    io.in(room).emit("latestMessages", { newMessage, room });
   });
 });
 
