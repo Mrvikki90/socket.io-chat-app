@@ -1,17 +1,20 @@
-import { Box } from "@chakra-ui/react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { ChakraProvider, Box } from "@chakra-ui/react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import "./App.css";
 import ChatRoom from "./components/ChatRoom";
 import JoinForm from "./components/JoinForm";
+import "react-perfect-scrollbar/dist/css/styles.css";
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<JoinForm />}></Route>
-        <Route path="/chat/:roomname" element={<ChatRoom />}></Route>
-        <Route path="*" element={<h1>404 Not Found</h1>}></Route>
-      </Routes>
-    </Router>
+    <ChakraProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<JoinForm />}></Route>
+          <Route path="/chat" element={<ChatRoom />}></Route>
+        </Routes>
+      </Router>
+    </ChakraProvider>
   );
 }
 

@@ -3,24 +3,38 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@accessible360/accessible-slick": "^1.0.1",
     "@chakra-ui/react": "^2.4.5",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "@feathersjs/feathers": "^5.0.0-pre.35",
+    "@feathersjs/socketio-client": "^5.0.0-pre.35",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "bootstrap": "^5.2.3",
     "date-fns": "^2.29.3",
     "framer-motion": "^8.0.2",
+    "jquery": "^3.6.3",
     "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.0",
+    "react-custom-scrollbars-2": "^4.5.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.41.2",
+    "react-icons": "^4.7.1",
+    "react-multi-carousel": "^2.8.2",
+    "react-perfect-scrollbar": "^1.5.8",
     "react-router-dom": "^6.6.1",
     "react-scripts": "5.0.1",
+    "react-scrollbars-custom": "^4.1.1",
     "react-select": "^5.7.0",
+    "react-slick": "^0.29.0",
+    "semantic-ui-css": "^2.5.0",
+    "semantic-ui-react": "^2.1.4",
+    "slick-carousel": "^1.8.1",
     "socket.io-client": "^4.5.4",
+    "styled-components": "^5.3.6",
     "sweetalert2": "^11.6.16",
     "web-vitals": "^2.1.4",
     "yup": "^0.32.11"
@@ -48,5 +62,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.2.4"
   }
 }
