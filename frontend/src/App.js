@@ -11,7 +11,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<JoinForm />}></Route>
-          <Route path="/chat" element={<ChatRoom />}></Route>
+          <Route path="/chat/:roomname" element={<ChatRoom />}></Route>
         </Routes>
       </Router>
     </ChakraProvider>

@@ -13,23 +13,22 @@ import { useNavigate } from "react-router-dom";
 
 const JoinForm = () => {
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [room, setRoom] = useState("");
   const navigate = useNavigate();
 
   const handleChnage1 = (e) => {
     setName(e.target.value);
   };
   const handleChnage2 = (e) => {
-    setEmail(e.target.value);
+    setRoom(e.target.value);
   };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     if (name) {
-      navigate(`/chat`, {
+      navigate(`/chat/${room}`, {
         state: {
           name: name,
-          email: email,
+          room: room,
         },
       });
     }
@@ -60,17 +59,13 @@ const JoinForm = () => {
               <Input placeholder="Enter your Name" onChange={handleChnage1} />
             </FormControl>
             <FormControl>
-              <FormLabel>Email</FormLabel>
-              <Input placeholder="Enter your Email" onChange={handleChnage2} />
-            </FormControl>
-            {/* <FormControl>
               <FormLabel>Select Room</FormLabel>
               <Select placeholder="Select Room" onChange={handleChnage2}>
                 <option value="Gaming">Gaming</option>
                 <option value="Coding">Coding</option>
                 <option value="Music">Music</option>
               </Select>
-            </FormControl> */}
+            </FormControl>
             <Button variant="outline" colorScheme="cyan" type="submit">
               Submit
             </Button>

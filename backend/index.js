@@ -16,8 +16,9 @@ const io = new Server(server, {
 
 io.on("connection", (socket) => {
   socket.on("joinRoom", (room) => {
-    socket.emit("joined_room", room);
-    socket.join(room);
+    console.log(room);
+    socket.join(room.room);
+    io.broadcast.in(room.room).emit("welcome", { username: room.name });
   });
   socket.on("newMessage", ({ newMessage, room }) => {
     console.log(newMessage, room);

@@ -14,9 +14,7 @@ import { Scrollbars } from "react-custom-scrollbars-2";
 import { useLocation } from "react-router-dom";
 import { io } from "socket.io-client";
 import { RoomsData } from "../mockData/data";
-import CodingRoom from "./ChatRooms/CodingRoom";
-import GamingRoom from "./ChatRooms/GamingRoom";
-import MusicRooms from "./ChatRooms/MusicRooms";
+import moment from "moment/moment";
 
 const ChatRoom = () => {
   const location = useLocation();
@@ -25,52 +23,22 @@ const ChatRoom = () => {
   const [allmessages, setAllMessages] = useState([]);
   const [sockets, setSockets] = useState();
   const [isChatting, setIsChatting] = useState(false);
-  const [rooms, setRooms] = useState();
+  const [clients, setClients] = useState([]);
 
   useEffect(() => {
     setData(location.state);
   }, [location]);
 
-  let roomsStore = [];
-
-  const setRoomCategory = (roomCat) => {
-    switch (roomCat) {
-      case "Gaming Room":
-        roomsStore.push(roomCat);
-        setRooms(roomCat);
-        return setIsChatting(true);
-
-      case "Coding Room":
-        roomsStore.push(roomCat);
-        setRooms(roomCat);
-        return setIsChatting(true);
-
-      case "Music Room":
-        roomsStore.push(roomCat);
-        setRooms(roomCat);
-        return setIsChatting(true);
-    }
-  };
-
-  useEffect(() => {
-    console.log("roomsStore", roomsStore);
-  }, [roomsStore]);
-
   useEffect(() => {
     const socket = io("http://localhost:8000/");
     setSockets(socket);
     socket.on("connect", () => {
-      socket.emit("joinRoom", rooms);
-    });
-  }, [rooms]);
-
-  useEffect(() => {
-    if (sockets) {
-      sockets.on("joined_room", (room) => {
-        roomsStore.push({ room });
+      socket.emit("joinRoom", {
+        name: location.state.name,
+        room: location.state.room,
       });
-    }
-  }, [rooms, sockets]);
+    });
+  }, []);
 
   useEffect(() => {
     if (sockets) {
@@ -79,11 +47,20 @@ const ChatRoom = () => {
         setMsg("");
       });
     }
-  }, [sockets, allmessages, rooms]);
+  }, [sockets, allmessages]);
+
+  const getClient = async () => {
+    if (sockets) {
+      await sockets.on("welcome", (userName) => {
+        console.log(userName);
+        setClients(userName);
+      });
+    }
+  };
 
   useEffect(() => {
-    console.log("allmessgaes", allmessages);
-  }, [allmessages]);
+    getClient();
+  }, []);
 
   const handleChnage = (e) => setMsg(e.target.value);
 
@@ -92,7 +69,7 @@ const ChatRoom = () => {
       const newMessage = { time: new Date(), msg: msg, name: data.name };
       sockets.emit("newMessage", {
         newMessage: newMessage,
-        room: rooms,
+        room: location.state.room,
       });
     }
   };
@@ -101,23 +78,32 @@ const ChatRoom = () => {
     <>
       <Flex bg="#e1b382" h="100vh">
         <Flex w="40vh" bg="#272727" boxShadow="dark-lg">
-          <Flex direction="column" gap="10">
-            <Text fontSize="4xl" m="4" color="white">
-              Chat Rooms
+          <Flex direction="column" mt="10" gap="6" alignItems="center" ml="12">
+            <Button
+              size="md"
+              variant="outline"
+              color="#00FF00"
+              onClick={() => setIsChatting(true)}
+            >
+              Start Chatting
+            </Button>
+            <Text fontSize="2xl" color="white">
+              Active Users
             </Text>
-            {RoomsData.map((item) => (
-              <Flex alignItems="center" justifyContent="space-evenly">
-                <Avatar src={item.img} />
-                <Text
-                  cursor="pointer"
-                  color="yellowgreen"
-                  fontSize="lg"
-                  onClick={() => setRoomCategory(item.disc)}
+            {clients &&
+              clients.map((item) => (
+                <Flex
+                  alignItems="center"
+                  justifyContent="space-evenly"
+                  gap="4"
+                  mx="8"
                 >
-                  {item.disc}
-                </Text>
-              </Flex>
-            ))}
+                  <Avatar src='"https://www.shutterstock.com/image-vector/assassin-head-mask-logo-gaming-600w-1930222925.jpg' />
+                  <Text cursor="pointer" color="#00FFFF" fontSize="lg">
+                    {item.userName}
+                  </Text>
+                </Flex>
+              ))}
           </Flex>
         </Flex>
         <Flex direction="column" w="full">
@@ -133,9 +119,6 @@ const ChatRoom = () => {
             <Flex>
               <Image w="10vh" h="10vh" src="/logo.png" />
             </Flex>
-            <Text fontSize="4xl" fontWeight="semibold" fontStyle="italic">
-              {rooms}
-            </Text>
             <Flex>
               <Avatar src="https://bit.ly/sage-adebayo" />
               <Box ml="3">
@@ -163,12 +146,31 @@ const ChatRoom = () => {
                   return data.name === item.name ? (
                     <Flex justifyContent="flex-end" m="6">
                       <div className="div-right">
+                        <Flex
+                          alignItems="center"
+                          justifyContent="space-between"
+                        >
+                          <Text fontStyle="italic" fontWeight="medium">
+                            {moment(msg.time).fromNow()}
+                          </Text>
+                          <Text fontSize="sm">{item.name}</Text>
+                        </Flex>
+
                         <Text>{item.msg}</Text>
                       </div>
                     </Flex>
                   ) : (
                     <Flex mt="4" justifyContent="flex-start">
                       <div className="div-left">
+                        <Flex
+                          alignItems="center"
+                          justifyContent="space-between"
+                        >
+                          <Text fontStyle="italic" fontWeight="medium">
+                            {moment(msg.time).fromNow()}
+                          </Text>
+                          <Text fontSize="sm">{item.name}</Text>
+                        </Flex>
                         <Text>{item.msg}</Text>
                       </div>
                     </Flex>
